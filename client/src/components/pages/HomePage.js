@@ -41,13 +41,13 @@ const HomePage = ({ startGetRandomQuote, voteRandomQuote }) => {
   return (
     <Layout className="layout">
       <Content style={{ padding: '50px', backgroundColor: 'white' }}>
-        {quoteLoading ? <Spin tip="Loading..."><figure class="quote">
+        {quoteLoading ? <Spin tip="Loading..."><figure className="quote">
             <blockquote>
               {quote.en}
             </blockquote>
             <figcaption>
             &mdash; {quote.author}, <cite>{quote.source}</cite>  </figcaption>
-          </figure></Spin> : <figure class="quote">
+          </figure></Spin> : <figure className="quote">
             <blockquote>
               {quote.en}
             </blockquote>
