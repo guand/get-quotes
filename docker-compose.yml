@@ -1,0 +1,83 @@
+version: "3.5"
+
+services:
+  nginx:
+    restart: on-failure
+    container_name: quote_nginx
+    build:
+      context: nginx/
+      dockerfile: Dockerfile.web
+    ports:
+      - '80:80'
+    extra_hosts:
+      - "local.quote-app.com:172.17.0.1"
+    networks:
+     - quote_dev
+
+  db:
+    image: postgres:11-alpine
+    container_name: quote_db
+    environment:
+     - POSTGRES_DB=quote_dev
+     - POSTGRES_PASSWORD=postgres
+    ports:
+     - "5432:5432"
+    networks:
+     - quote_dev
+    volumes:
+     - db_data:/var/lib/postgresql/data
+
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile.web
+    image: node-dev
+    container_name: quote_api
+    restart: on-failure
+    env_file:
+     - docker-environment.dev
+    command:
+     - ./docker-entrypoint-dev-app.sh
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    extra_hosts:
+      - "local.quote-app.com:172.17.0.1"
+    networks:
+     - quote_dev
+
+  client:
+    build:
+      context: client/
+      dockerfile: Dockerfile.web
+    image: react-dev
+    container_name: quote_app
+    restart: on-failure
+    env_file:
+     - docker-environment.dev
+    extra_hosts:
+     - "local.quote-app.com:172.17.0.1"
+    networks:
+     - quote_dev
+    ports:
+      - "3000:3000"
+    volumes:
+     - ./client:/usr/src/app
+     - /usr/src/app/node_modules
+    depends_on:
+      - api
+    stdin_open: true
+
+
+
+networks:
+  quote_dev:
+      name: quote_dev
+
+volumes:
+  db_data:
+    name: quote-db-data

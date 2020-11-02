@@ -1,0 +1,10 @@
+FROM node:10-alpine
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --silent \
+    && npm i react-scripts@3.4.1 -g --silent 
+
+CMD npm start

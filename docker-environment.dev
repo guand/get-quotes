@@ -1,0 +1,7 @@
+DB_NAME=quote_dev
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=local.quote-app.com
+
+QUOTE_URL=https://programming-quotes-api.herokuapp.com/
+REACT_APP_API_URL=http://localhost/api
