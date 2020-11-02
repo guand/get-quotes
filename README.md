@@ -8,4 +8,4 @@ Docker
 - docker-compose build
 - docker-compose up
 
-visit localhost in browser
+visit `http://localhost` in browser
